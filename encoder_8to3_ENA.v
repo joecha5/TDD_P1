@@ -1,15 +1,13 @@
-module encoder_8to3 (
-    input [7:0] data_in,
-    input enable,
-    output [2:0] code_out
+
+module encode8a3(
+    input [7:0] in,    // Entradas del codificador
+    input ena,        // Enable
+    output [2:0] sel  // Salidas del codificador
 );
 
-wire [7:0] and_result;
-wire [2:0] priority_encoder_out;
-
-assign and_result = (enable) ? (data_in & 8'b11100000) : 8'b00000000;
-assign priority_encoder_out = (enable) ? and_result[7:5] : 3'b000;
-
-assign code_out = priority_encoder_out;
+  assign sel[2] = (in[4] | in[5] | in[6] | in[7]) & ena;
+  assign sel[1] = (in[2] | in[3] | in[6] | in[7]) & ena;
+  assign sel[0] = (in[1] | in[3] | in[5] | in[7]) & ena;
 
 endmodule
+
